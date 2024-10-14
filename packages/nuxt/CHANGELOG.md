@@ -1,5 +1,164 @@
 # Changelog
 
+## [0.26.0](https://github.com/IGx89/bootstrap-vue-next/compare/nuxt-v0.25.0...nuxt-v0.26.0) (2024-10-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **BDropdown:** remove props center, dropend, dropstart, dropup, & end -- use single prop placement -- has same rules as popover. placement=top-start placement=bottom-start placement=right-start etc etc fixes #1752
+* **BProgress:** fix markup for BProgress to match bootstrap 5.3 recommended fixes #2221 . Manual intervention may not be needed, double check your aria markup (if manually configured), may be automatic
+* **useToast:** rename useToast to useToastController fixes #2155
+* **BModal:** remove prop backdropVariant
+* **BModal:** revert back to using the native `div.modal-backdrop`
+* **BOffcanvas:** revert back to native `div.offcanvas-backdrop`
+* **BOffcanvas:** remove prop backdropBlur and backdropVariant
+* **createBootstrap:** remove automatic import of components and directives fixing an issue with createBootstrap bloating the project size. When components were unused, it bloated the project size -- ie not tree shaking when you only used the plugins
+* **createBootstrap:** flatten the params object. The previous "plugins" key is now the top most level object => `{ plugins: { id: {} }` => `{ id: {} }` and so on
+* **createBootstrap:** remove alias in createBootstrap, use alias in unplugin-vue-components resolver instead
+* remove the default export. Use named export `createBootstrap` instead
+* **BOffcanvas:** rename prop backdrop to hideBackdrop to be more in line with standard of bmodal
+* remove binputgroupappend binputgroupprepend => use component binputgrouptext
+* **BFormInput:** move props lazy, trim & number to v-model modifier. Modifiers should behave more like native Vue modifiers (number modifier with unparseable value returns value as is)
+* **BreakpointProps:** strongly type breakpoints. Instead of weak string | number => 1,2,3...'1','2','3'...
+* **BDropdown:** replace "container" prop with "teleportTo"
+* **BPopover:** replace "container" prop with "teleportTo"
+* **BTable:** deprecate noSortReset, use `mustSort`
+* **BFormTags:** remove input event -- use https://github.com/update:modelValue
+* use createBootstrap function for the plugin definition
+* **useBreadcrumb:** return a ref instead of reactive
+* **BToast:** rebuild events to match https://getbootstrap.com/docs/5.3/components/toasts/#events (hide, hidden, show, shown)
+* **BToast:** close event no longer is start of transition, use "hide" event. Close event now corresponds to when close button is clicked during the hide process
+* **BootstrapVuePlugin:** components default is now false. The plugin WILL NOT automatically load all components into global scope (perf) - use option "true" to change
+* **BootstrapVuePlugin:** directives default is now false. The plugin WILL NOT automatically load all directives into global scope (perf) - use option "true" to change
+* **BootstrapVueNextPlugin:** named export renamed from BootstrapVueNext to BootstrapVueNextPlugin
+* rebuild "global variable" system to use app-level provide inject. Review documentation installation guide ([#1719](https://github.com/IGx89/bootstrap-vue-next/issues/1719))
+* **useToast:** redefine the parameters of "show". Instead of many parameters, we simply use a single object
+* **useModalController:** redefine the parameters of "show" and "confirm" Instead of many parameters, we simply use a single object
+* **useToast:** redefine the parameters of "show". Instead of many p… ([#1712](https://github.com/IGx89/bootstrap-vue-next/issues/1712))
+* required vue 3.4
+* rename "Toast" type to OrchestratedToast
+* **useToast:** rename "hide" to "remove" to be more in line with useModalController
+* **BImg:** rounded none by default
+* **BOverlay:** rounded none by default
+
+### Features
+
+* **BAlert:** add noResumeOnHoverLeave prop ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **BCarouselSlide:** allow individual interval for slides ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **BDropdown:** add teleportDisabled prop ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BDropdown:** remove props center, dropend, dropstart, dropup, & end -- use single prop placement -- has same rules as popover. placement=top-start placement=bottom-start placement=right-start etc etc fixes [#1752](https://github.com/IGx89/bootstrap-vue-next/issues/1752) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BDropdown:** replace "container" prop with "teleportTo" ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BFormCheckbox:** use a different value/uncheckedValue system under the hood streamlining the code and process ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BFormInput:** move props lazy, trim & number to v-model modifier. Modifiers should behave more like native Vue modifiers (number modifier with unparseable value returns value as is) ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **BFormInput:** type number performs the same as modifier ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **BFormSpinbutton:** remove render functions, fix docs ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BFormTags:** remove input event -- use https://github.com/update:modelValue ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* bimg prop tag ([5e511a6](https://github.com/IGx89/bootstrap-vue-next/commit/5e511a6a83b2193aa240e1839f1c7a3a3545cae8))
+* **BModal:** remove prop backdropVariant ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **BModal:** revert back to using the native `div.modal-backdrop` ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **BOffcanvas:** remove prop backdropBlur and backdropVariant ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **BOffcanvas:** rename prop backdrop to hideBackdrop to be more in line with standard of bmodal ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **BOffcanvas:** revert back to native `div.offcanvas-backdrop` ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **BootstrapVueNextPlugin:** named export renamed from BootstrapVueNext to BootstrapVueNextPlugin ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* **BootstrapVuePlugin:** components default is now false. The plugin WILL NOT automatically load all components into global scope (perf) - use option "true" to change ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* **BootstrapVuePlugin:** directives default is now false. The plugin WILL NOT automatically load all directives into global scope (perf) - use option "true" to change ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* **BPopover:** add teleportDisabled prop ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BPopover:** replace "container" prop with "teleportTo" ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BProgress:** fix markup for BProgress to match bootstrap 5.3 recommended fixes [#2221](https://github.com/IGx89/bootstrap-vue-next/issues/2221) . Manual intervention may not be needed, double check your aria markup (if manually configured), may be automatic ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BreakpointProps:** strongly type breakpoints. Instead of weak string | number =&gt; 1,2,3...'1','2','3'... ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **BTable:** add emptyText and emptyFilteredText functionality fixes [#664](https://github.com/IGx89/bootstrap-vue-next/issues/664) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BTable:** add functional syntax for sortAsc/sortDesc/sortDefault `sortAsc(fieldKey)` to specify the sort content for that specific field ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** add prop multisort ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** allow Numberish values =&gt; string is interpreted as is with maxHeight, numbers are converted to ${number}px maxHeight ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** deprecate noSortReset, use `mustSort` ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** selectedItems becomes a v-modelable prop ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BTable:** WIP fix reactivity engine ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BToast:** add noResumeOnHoverLeave prop ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **BToaster:** expose show method ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **createBootstrap:** flatten the params object. The previous "plugins" key is now the top most level object =&gt; `{ plugins: { id: {} }` => `{ id: {} }` and so on ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **createBootstrap:** remove alias in createBootstrap, use alias in unplugin-vue-components resolver instead ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* **createBootstrap:** remove automatic import of components and directives fixing an issue with createBootstrap bloating the project size. When components were unused, it bloated the project size -- ie not tree shaking when you only used the plugins ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* export component prop types ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* implement a use defaults system fixes [#1607](https://github.com/IGx89/bootstrap-vue-next/issues/1607) ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* implement global alias system fixes [#1753](https://github.com/IGx89/bootstrap-vue-next/issues/1753) ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* implmenet a use defaults system WIP fixes [#1607](https://github.com/IGx89/bootstrap-vue-next/issues/1607)  ([#1889](https://github.com/IGx89/bootstrap-vue-next/issues/1889)) ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **modalController:** make {} default for show/confirm -- param not required ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* namespace out package - bootstrap-vue-next/directives bootstrap-vue-next/components etc ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **nuxt:** add css option to not automatically include css ([f6adcee](https://github.com/IGx89/bootstrap-vue-next/commit/f6adceeb2ce4d994215f7864c1adaf39deaa9160))
+* **nuxt:** allow passthrough options to createBootstrap plugin ([5458a5a](https://github.com/IGx89/bootstrap-vue-next/commit/5458a5afd8bb46d3951f3fdee048f85030bc32de))
+* **nuxt:** auto import directives ([#1770](https://github.com/IGx89/bootstrap-vue-next/issues/1770)) ([228e0f7](https://github.com/IGx89/bootstrap-vue-next/commit/228e0f7a61f92176f4aba78ddd2150dc4467d6cb))
+* **nuxt:** automatically globally set teleportTo to `#teleports` ([8e73b17](https://github.com/IGx89/bootstrap-vue-next/commit/8e73b177051d4403ca7a159e7c11707de15e638c))
+* **PluginControllers:** Allow for using the prop.id for the items key. Ie if you supply modalController.show({props: {id: 'foo' }}) You can reference it leave('foo') ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* remove binputgroupappend binputgroupprepend =&gt; use component binputgrouptext ([5e511a6](https://github.com/IGx89/bootstrap-vue-next/commit/5e511a6a83b2193aa240e1839f1c7a3a3545cae8))
+* remove the default export. Use named export `createBootstrap` instead ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* rename "Toast" type to OrchestratedToast ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* required vue 3.4 ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **toast:** make {} default for show -- param not required ([1e88b09](https://github.com/IGx89/bootstrap-vue-next/commit/1e88b09d8992e13948e6f94278c7c51cf4960ec8))
+* use createBootstrap function for the plugin definition ([f10fc5f](https://github.com/IGx89/bootstrap-vue-next/commit/f10fc5f1c3e6305d7c109d92c2c6995178372649))
+* use vues useId fn ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **useBreadcrumb:** return a ref instead of reactive ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* **useModalController:** add confirm/show methods to globally create modals ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **useModalController:** add confirm/show methods to globally create modals ([#1701](https://github.com/IGx89/bootstrap-vue-next/issues/1701)) ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **useModalController:** redefine the parameters of "show" and "confirm" Instead of many parameters, we simply use a single object ([c542416](https://github.com/IGx89/bootstrap-vue-next/commit/c5424161be549cf11d73af4fca2ef1789ea2a201))
+* **useModalController:** show/confirm accept reactive inputs ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **usePopoverController:** create usePopoverController composable (not fully complete) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **useToast:** redefine the parameters of "show". Instead of many p… ([#1712](https://github.com/IGx89/bootstrap-vue-next/issues/1712)) ([c542416](https://github.com/IGx89/bootstrap-vue-next/commit/c5424161be549cf11d73af4fca2ef1789ea2a201))
+* **useToast:** redefine the parameters of "show". Instead of many parameters, we simply use a single object ([c542416](https://github.com/IGx89/bootstrap-vue-next/commit/c5424161be549cf11d73af4fca2ef1789ea2a201))
+* **useToast:** rename "hide" to "remove" to be more in line with useModalController ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **useToast:** rename useToast to useToastController fixes [#2155](https://github.com/IGx89/bootstrap-vue-next/issues/2155) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **useToast:** show to accept reactive inputs ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **utils:** inject getId to allow for custom id generation ([#1836](https://github.com/IGx89/bootstrap-vue-next/issues/1836)) ([c9e60f5](https://github.com/IGx89/bootstrap-vue-next/commit/c9e60f57da5ab703a75433a521ebd55eb26ac569))
+* WIP table improvements ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+
+
+### Bug Fixes
+
+* **BDropdown:** bdropdown when in button group has class btn-group fixes [#2025](https://github.com/IGx89/bootstrap-vue-next/issues/2025) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* BFormRadio use native [@change](https://github.com/change) & [@input](https://github.com/input) events ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BImg:** rounded none by default ([f259f78](https://github.com/IGx89/bootstrap-vue-next/commit/f259f78cbaef9bb56a813351a64a52c315a56806))
+* **BOverlay:** rounded none by default ([f259f78](https://github.com/IGx89/bootstrap-vue-next/commit/f259f78cbaef9bb56a813351a64a52c315a56806))
+* **BTable:** busy slot behavior to match bootstrap-vue fixes [#1636](https://github.com/IGx89/bootstrap-vue-next/issues/1636) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BTable:** cast formatted items to string fixes [#2227](https://github.com/IGx89/bootstrap-vue-next/issues/2227) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BTable:** fix handleFieldSorting algorithm to properly handle multisort with mustSort ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** generic types ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** selectModel default value single =&gt; multi ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **BTable:** set sort values to undefined so we dont accidentally wipe user defined comparer functions ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BTable:** stickyHeader true causes maxHeight 300px ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* **BToast:** close event no longer is start of transition, use "hide" event. Close event now corresponds to when close button is clicked during the hide process ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* **BToast:** rebuild events to match https://getbootstrap.com/docs/5.3/components/toasts/#events (hide, hidden, show, shown) ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* change renderorskip to wrapper, add our own teleport logic. ([#2162](https://github.com/IGx89/bootstrap-vue-next/issues/2162)) ([8c0acbd](https://github.com/IGx89/bootstrap-vue-next/commit/8c0acbd2ca957be27dd618bb7e33b7ff943973be))
+* **Directives:** use TS satisfies over TS as -- surprisingly had an affect ([fc1edfb](https://github.com/IGx89/bootstrap-vue-next/commit/fc1edfb672c665c320618a85b16a90c96c798b8d))
+* **generics:** use generic constraints for BTable & BTableLite ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* modal transitions fixes  [#1861](https://github.com/IGx89/bootstrap-vue-next/issues/1861) ([5e511a6](https://github.com/IGx89/bootstrap-vue-next/commit/5e511a6a83b2193aa240e1839f1c7a3a3545cae8))
+* **nuxt:** defineNuxtPlugin is not defined fixes [#1741](https://github.com/IGx89/bootstrap-vue-next/issues/1741) ([a5e76d6](https://github.com/IGx89/bootstrap-vue-next/commit/a5e76d6111d06d3555e6677f128ed9b84af1a66f))
+* **nuxt:** do not transformasseturls for img -- Fixed by nuxt ([f259f78](https://github.com/IGx89/bootstrap-vue-next/commit/f259f78cbaef9bb56a813351a64a52c315a56806))
+* **nuxt:** dont teleport everything to #teleports -- selectively teleport based on body fixes [#1898](https://github.com/IGx89/bootstrap-vue-next/issues/1898) ([e986e94](https://github.com/IGx89/bootstrap-vue-next/commit/e986e94a7a3db64334ecac6927a7d384cbe5882f))
+* **nuxt:** optimize `bootstrap-vue-next` fixes [#1758](https://github.com/IGx89/bootstrap-vue-next/issues/1758) ([1aba0d1](https://github.com/IGx89/bootstrap-vue-next/commit/1aba0d1501f815dd7a1a15ed14e874a578d1db9f))
+* **nuxt:** resolution of img not working fixes [#1539](https://github.com/IGx89/bootstrap-vue-next/issues/1539) ([ff63f2c](https://github.com/IGx89/bootstrap-vue-next/commit/ff63f2c490e3068f61760e5ba59b283c40acedc7))
+* rebuild "global variable" system to use app-level provide inject. Review documentation installation guide ([#1719](https://github.com/IGx89/bootstrap-vue-next/issues/1719)) ([afd7e5f](https://github.com/IGx89/bootstrap-vue-next/commit/afd7e5fbd1e8d4decb626c726590225d67804ba1))
+* some migration issues with defineModel ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* Some prop types were build wrong because of vue bug ([3459a54](https://github.com/IGx89/bootstrap-vue-next/commit/3459a54f4242509a6a23e9a48430de5f3d190157))
+* types generation -- use interfaces for componentprops ([de60ce3](https://github.com/IGx89/bootstrap-vue-next/commit/de60ce3cd2bc3ee8768331ae8ce69b2c5f3eed73))
+* update dependencies to fix a bug in vue compiler ([#1866](https://github.com/IGx89/bootstrap-vue-next/issues/1866)) ([b2c56bf](https://github.com/IGx89/bootstrap-vue-next/commit/b2c56bff644177d5653b628a9cbb30ffa5c7055a))
+* **useModal:** not working due to registry value not existing when code ran ([f259f78](https://github.com/IGx89/bootstrap-vue-next/commit/f259f78cbaef9bb56a813351a64a52c315a56806))
+
+
+### Performance Improvements
+
+* **BTabs:** more efficient unregisterTab function ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+* **nuxt:** smaller package ([#2012](https://github.com/IGx89/bootstrap-vue-next/issues/2012)) ([cc1e609](https://github.com/IGx89/bootstrap-vue-next/commit/cc1e60973b76575fa2cd3ef12ea919fabf152085))
+* **useModalManager:** use shallowRef for stack & registry ([f259f78](https://github.com/IGx89/bootstrap-vue-next/commit/f259f78cbaef9bb56a813351a64a52c315a56806))
+* **useToast:** use shallowRef ([ca16a16](https://github.com/IGx89/bootstrap-vue-next/commit/ca16a168687dc0e17d6dc5c6210205c1911dd793))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * bootstrap-vue-next bumped to 0.26.0
+  * peerDependencies
+    * bootstrap-vue-next bumped to 0.26.0
+
 ## [0.25.0](https://github.com/bootstrap-vue-next/bootstrap-vue-next/compare/nuxt-v0.24.23...nuxt-v0.25.0) (2024-10-11)
 
 
