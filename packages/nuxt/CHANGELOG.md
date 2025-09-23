@@ -1,5 +1,75 @@
 # Changelog
 
+## [0.40.0](https://github.com/IGx89/bootstrap-vue-next/compare/nuxt-v0.40.4...nuxt-v0.40.0) (2025-09-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **BSort:** Implement initial-sort-direction and move compare from sort-by to fields ([#2777](https://github.com/IGx89/bootstrap-vue-next/issues/2777))
+* Merged the Orchestrator components into one.
+* renamed the controller composables to `useToast`, `useModal`, and `usePopover`
+* combined the old plugins to match the new BApp and composables.
+* the old `useModal` was removed since `useToggle` does all what it did.
+* new `BApp` component as the recommended way to configure bootstrap-vue-next applications, replacing the plugin-based approach.
+* **BTable:** fix a long standing regression in which the comparer function in btable did not give the item value, instead passing a string fixes #2565
+* **useToast:** rename useToast to useToastController fixes #2155
+* **BDropdown:** remove props center, dropend, dropstart, dropup, & end -- use single prop placement -- has same rules as popover. placement=top-start placement=bottom-start placement=right-start etc etc fixes #1752
+* **BProgress:** fix markup for BProgress to match bootstrap 5.3 recommended fixes #2221 . Manual intervention may not be needed, double check your aria markup (if manually configured), may be automatic
+
+### Features
+
+* **BAlert:** add noResumeOnHoverLeave prop ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **BDropdown:** remove props center, dropend, dropstart, dropup, & end -- use single prop placement -- has same rules as popover. placement=top-start placement=bottom-start placement=right-start etc etc fixes [#1752](https://github.com/IGx89/bootstrap-vue-next/issues/1752) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BFormCheckbboxGroup:** spread the input object rather than el.props fixes [#2590](https://github.com/IGx89/bootstrap-vue-next/issues/2590) ([2c3970c](https://github.com/IGx89/bootstrap-vue-next/commit/2c3970ca3ed0c3d312600877c8ec0043a6834144))
+* **BFormRadioGroup:** spread the input object rather than el.props fixes [#2590](https://github.com/IGx89/bootstrap-vue-next/issues/2590) ([2c3970c](https://github.com/IGx89/bootstrap-vue-next/commit/2c3970ca3ed0c3d312600877c8ec0043a6834144))
+* **BProgress:** fix markup for BProgress to match bootstrap 5.3 recommended fixes [#2221](https://github.com/IGx89/bootstrap-vue-next/issues/2221) . Manual intervention may not be needed, double check your aria markup (if manually configured), may be automatic ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BSort:** Implement initial-sort-direction and move compare from sort-by to fields ([#2777](https://github.com/IGx89/bootstrap-vue-next/issues/2777)) ([b3eec6e](https://github.com/IGx89/bootstrap-vue-next/commit/b3eec6eaabf654bb21124b9601d9c3809e5eb0cc))
+* **BTable:** add emptyText and emptyFilteredText functionality fixes [#664](https://github.com/IGx89/bootstrap-vue-next/issues/664) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BToast:** add noResumeOnHoverLeave prop ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* combined the old plugins to match the new BApp and composables. ([ba90f59](https://github.com/IGx89/bootstrap-vue-next/commit/ba90f596ad3376ebddda535bf8b88232c60befff))
+* Merged the Orchestrator components into one. ([ba90f59](https://github.com/IGx89/bootstrap-vue-next/commit/ba90f596ad3376ebddda535bf8b88232c60befff))
+* namespace out package - bootstrap-vue-next/directives bootstrap-vue-next/components etc ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* new `BApp` component as the recommended way to configure bootstrap-vue-next applications, replacing the plugin-based approach.  ([ba90f59](https://github.com/IGx89/bootstrap-vue-next/commit/ba90f596ad3376ebddda535bf8b88232c60befff))
+* **PluginControllers:** Allow for using the prop.id for the items key. Ie if you supply modalController.show({props: {id: 'foo' }}) You can reference it leave('foo') ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* renamed the controller composables to `useToast`, `useModal`, and `usePopover` ([ba90f59](https://github.com/IGx89/bootstrap-vue-next/commit/ba90f596ad3376ebddda535bf8b88232c60befff))
+* the old `useModal` was removed since `useToggle` does all what it did. ([ba90f59](https://github.com/IGx89/bootstrap-vue-next/commit/ba90f596ad3376ebddda535bf8b88232c60befff))
+* use vues useId fn ([69316a5](https://github.com/IGx89/bootstrap-vue-next/commit/69316a565f39f0b17932dcf6691a287f0ce4ed9d))
+* **usePopoverController:** create usePopoverController composable (not fully complete) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **useToast:** rename useToast to useToastController fixes [#2155](https://github.com/IGx89/bootstrap-vue-next/issues/2155) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+
+
+### Bug Fixes
+
+* **BAvatar:** avatar style getting literal Size values fixes [#2535](https://github.com/IGx89/bootstrap-vue-next/issues/2535) ([7621aad](https://github.com/IGx89/bootstrap-vue-next/commit/7621aad0000c9138983315630e35657c6eb97f08))
+* **BDropdown:** bdropdown when in button group has class btn-group fixes [#2025](https://github.com/IGx89/bootstrap-vue-next/issues/2025) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BLink:** Link receiving / href when trying to use href prop fixes [#2434](https://github.com/IGx89/bootstrap-vue-next/issues/2434) ([#2438](https://github.com/IGx89/bootstrap-vue-next/issues/2438)) ([aea1798](https://github.com/IGx89/bootstrap-vue-next/commit/aea179881c27e429b1588a62844fd230ec36df0d))
+* **BLink:** nuxt should do full page reloads on to prop fixes [#2445](https://github.com/IGx89/bootstrap-vue-next/issues/2445) ([#2449](https://github.com/IGx89/bootstrap-vue-next/issues/2449)) ([cce9833](https://github.com/IGx89/bootstrap-vue-next/commit/cce9833ebd91bcfe1037ffb6422edfdc03389198))
+* **BTable:** busy slot behavior to match bootstrap-vue fixes [#1636](https://github.com/IGx89/bootstrap-vue-next/issues/1636) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BTable:** cast formatted items to string fixes [#2227](https://github.com/IGx89/bootstrap-vue-next/issues/2227) ([e6749a3](https://github.com/IGx89/bootstrap-vue-next/commit/e6749a366aa839d2607c1aeba6b786e4e2299abf))
+* **BTable:** duplicate labels with both labelstacked and label fixes [#2608](https://github.com/IGx89/bootstrap-vue-next/issues/2608) ([0658251](https://github.com/IGx89/bootstrap-vue-next/commit/0658251e3a592835c89b829993ea874a54b4ae22))
+* **BTable:** fix a long standing regression in which the comparer function in btable did not give the item value, instead passing a string fixes [#2565](https://github.com/IGx89/bootstrap-vue-next/issues/2565) ([05d0b6e](https://github.com/IGx89/bootstrap-vue-next/commit/05d0b6ef7f2561683d06132354616933a0455307))
+* **BTableLite:** stacked uses field key instead of defined label fixes [#2591](https://github.com/IGx89/bootstrap-vue-next/issues/2591) ([05d0b6e](https://github.com/IGx89/bootstrap-vue-next/commit/05d0b6ef7f2561683d06132354616933a0455307))
+* **BTable:** stacked mode when using breakpoint data-label not rendering fixes [#2595](https://github.com/IGx89/bootstrap-vue-next/issues/2595) ([2c3970c](https://github.com/IGx89/bootstrap-vue-next/commit/2c3970ca3ed0c3d312600877c8ec0043a6834144))
+* change renderorskip to wrapper, add our own teleport logic. ([#2162](https://github.com/IGx89/bootstrap-vue-next/issues/2162)) ([8c0acbd](https://github.com/IGx89/bootstrap-vue-next/commit/8c0acbd2ca957be27dd618bb7e33b7ff943973be))
+* **nuxt:** module using wrong routerComponentName causing default a tag to do full page reloads ([#2465](https://github.com/IGx89/bootstrap-vue-next/issues/2465)) ([c737ec2](https://github.com/IGx89/bootstrap-vue-next/commit/c737ec255b8eb848a6711eea5383cbf20b002556))
+* update deps fixes [#2487](https://github.com/IGx89/bootstrap-vue-next/issues/2487) ([#2617](https://github.com/IGx89/bootstrap-vue-next/issues/2617)) ([5f4416e](https://github.com/IGx89/bootstrap-vue-next/commit/5f4416eaf644145cb3f454e051905a851b6a0091))
+
+
+### Performance Improvements
+
+* **BTable:** use a single array.reduce instead of multiple verbose methods when iterating the items array. Reducing the total number of iterations fixes [#2404](https://github.com/IGx89/bootstrap-vue-next/issues/2404) ([7621aad](https://github.com/IGx89/bootstrap-vue-next/commit/7621aad0000c9138983315630e35657c6eb97f08))
+* **nuxt:** smaller package ([#2012](https://github.com/IGx89/bootstrap-vue-next/issues/2012)) ([cc1e609](https://github.com/IGx89/bootstrap-vue-next/commit/cc1e60973b76575fa2cd3ef12ea919fabf152085))
+* use getter functions over computed in some cases ([34d2a8f](https://github.com/IGx89/bootstrap-vue-next/commit/34d2a8f850dd965100ccbbcd8c00f05baceb6caa))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * bootstrap-vue-next bumped to 0.40.0
+  * peerDependencies
+    * bootstrap-vue-next bumped to 0.40.0
+
 ## [0.40.4](https://github.com/bootstrap-vue-next/bootstrap-vue-next/compare/nuxt-v0.40.3...nuxt-v0.40.4) (2025-09-16)
 
 
