@@ -105,20 +105,28 @@ export const useToast = () => {
    * Hides a mounted BToast that registered itself under `id`. Going through the component, rather
    * than through the store, is what lets the trigger flow through the regular hide cycle
    *
-   * @returns whether an instance was found
+   * @returns whether a toast was found
    */
   const hideRegisteredInstance = (id: ControllerKey, trigger?: string): boolean => {
     // The show/hide registry is keyed by the html id, symbols never reach it
     if (typeof id !== 'string') return false
-    const instance = showHideRegistry?.values.value.get(id)?.getActive()
-    if (!instance) return false
-    instance.hide(trigger, true)
-    return true
+    const instances = showHideRegistry?.values.value.get(id)?.instances
+    if (!instances) return false
+    // Every show/hide component shares this registry, so an id may resolve to a BCollapse or a
+    // BModal. Only toasts are ours to hide. Newest first, the way the registry's getActive does
+    for (let i = instances.length - 1; i >= 0; i--) {
+      const instance = instances[i]
+      if (instance?.component.type !== BToast) continue
+      instance.hide(trigger, true)
+      return true
+    }
+    return false
   }
 
   /**
    * Hides a toast that lives in the orchestrator store. Prefers the mounted instance, falling back
    * to the store entry itself, which also covers toasts that the orchestrator has yet to render
+   * and toasts rendered through a custom `component`
    */
   const hideStoreItem = (item: Ref<ToastOrchestratorArrayValue>, trigger?: string): void => {
     if (hideRegisteredInstance(item.value.props.id ?? item.value.id, trigger)) return

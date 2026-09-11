@@ -2,6 +2,7 @@ import {describe, expect, it} from 'vitest'
 import {computed, defineComponent, h, nextTick, ref, watchEffect} from 'vue'
 import {mount} from '@vue/test-utils'
 import BApp from '../../components/BApp/BApp.vue'
+import BCollapse from '../../components/BCollapse/BCollapse.vue'
 import BToast from '../../components/BToast/BToast.vue'
 import type {BvTriggerableEvent} from '../../utils'
 import {useToast} from './index'
@@ -221,6 +222,71 @@ describe('useToast', () => {
 
       expect(hideEvents).toHaveLength(1)
       expect(hideEvents[0].trigger).toBe('clear')
+    })
+
+    it('leaves other show/hide components that share the id alone', async () => {
+      const collapseHideEvents: BvTriggerableEvent[] = []
+      let toastHide: ReturnType<typeof useToast>['hide'] | undefined
+      const TestComponent = defineComponent({
+        setup() {
+          const {hide} = useToast()
+          toastHide = hide
+          return () =>
+            h(BCollapse, {
+              id: 'shared-id',
+              modelValue: true,
+              onHide: (e: BvTriggerableEvent) => {
+                collapseHideEvents.push(e)
+              },
+            })
+        },
+      })
+
+      mount(BApp, {slots: {default: () => h(TestComponent)}})
+      await nextTick()
+
+      toastHide?.('clear', 'shared-id')
+      await nextTick()
+
+      expect(collapseHideEvents).toHaveLength(0)
+    })
+
+    it('hides the toast, not the component that shares its id', async () => {
+      const hideEvents: BvTriggerableEvent[] = []
+      const collapseHideEvents: BvTriggerableEvent[] = []
+      let toastHide: ReturnType<typeof useToast>['hide'] | undefined
+      const TestComponent = defineComponent({
+        setup() {
+          const {create, hide} = useToast()
+          toastHide = hide
+          create({
+            id: 'shared-id',
+            title: 'Shared Id Toast',
+            modelValue: true,
+            onHide: (e: BvTriggerableEvent) => {
+              hideEvents.push(e)
+            },
+          })
+          return () =>
+            h(BCollapse, {
+              id: 'shared-id',
+              modelValue: true,
+              onHide: (e: BvTriggerableEvent) => {
+                collapseHideEvents.push(e)
+              },
+            })
+        },
+      })
+
+      mount(BApp, {slots: {default: () => h(TestComponent)}})
+      await nextTick()
+
+      toastHide?.('clear', 'shared-id')
+      await nextTick()
+
+      expect(uniqueEvents(hideEvents)).toHaveLength(1)
+      expect(hideEvents[0].trigger).toBe('clear')
+      expect(collapseHideEvents).toHaveLength(0)
     })
 
     it('does nothing when no toast matches the id', async () => {

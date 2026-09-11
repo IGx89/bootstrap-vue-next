@@ -70,12 +70,14 @@ Toasts can also be hidden from anywhere in the app, without holding on to the co
 
 - `hideAll: (trigger?: string) => void`
 
-  Hides every toast
+  Hides every toast that was created through the composable
 
-Both functions hide toasts that were created through the composable, as well as `BToast` components
-declared in a template that were given a matching `id`. A toast that the orchestrator has not
-rendered yet is hidden through its store entry, so it never becomes visible. Those toasts report
-`modelValue` as their `trigger`, since there is no component to run the hide cycle through.
+`hide(trigger, id)` also hides a `BToast` that was declared in a template with a matching `id`.
+`hideAll` and `hide` without an `id` only cover the toasts that were created through the composable.
+
+A toast that the orchestrator has not rendered yet is hidden through its store entry, so it never
+becomes visible. Such a toast reports `modelValue` as its `trigger`, since there is no component to
+run the hide cycle through. The same applies to a toast rendered through a custom `component`.
 
 Hiding a toast does not remove it from the orchestrator store, see
 [Lifecycle and disposal](#lifecycle-and-disposal).
