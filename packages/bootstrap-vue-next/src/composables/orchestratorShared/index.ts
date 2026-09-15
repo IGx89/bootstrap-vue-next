@@ -1,6 +1,15 @@
-import {type ComponentPublicInstance, inject, nextTick, provide, readonly, type Ref, ref} from 'vue'
+import {
+  type ComponentPublicInstance,
+  inject,
+  nextTick,
+  provide,
+  readonly,
+  type Ref,
+  ref,
+  watch,
+} from 'vue'
 import type {ComponentController, ControllerKey, PromiseWithController} from '../../types'
-import type {BvTriggerableEvent} from '../../utils'
+import {BvTriggerableEvent} from '../../utils'
 import {orchestratorRegistryKey, type OrchestratorStoreObject} from '../../utils/keys'
 
 /* oxlint-disable-next-line no-explicit-any */
@@ -27,13 +36,46 @@ export const buildController = <
   }
   const findItem = () => store.value.get(id)
 
+  /**
+   * Resolves when the item is dismissed.
+   *
+   * Normally that is the `hide`/`hidden` event the orchestrator forwards into `basePromise`. A
+   * dismissal that bypasses the component emits nothing, though, so also settle when `modelValue`
+   * goes falsy while nothing is mounted under this id - otherwise the caller waits forever for an
+   * event that cannot arrive. An item that does have a mounted instance is left alone: it runs the
+   * real hide cycle and reports the real event, including when it was dismissed through its store
+   * entry.
+   */
+  const awaitDismissal = async () => {
+    let stopWatch = () => {}
+    const dismissedWithoutInstance = new Promise<BvTriggerableEvent>((resolve) => {
+      stopWatch = watch(
+        () => findItem()?.value.props.modelValue,
+        (modelValue) => {
+          if (!modelValue && controller.ref === null) {
+            resolve(new BvTriggerableEvent('hidden'))
+          }
+        },
+        // `destroy()` hides before it awaits, so the dismissal can already have happened by the time
+        // this runs. `show()` is unaffected: it either starts from a truthy `modelValue`, or sets one
+        // synchronously, or has a mounted instance to show - none of which match the condition above
+        {immediate: true}
+      )
+    })
+    try {
+      return await Promise.race([basePromise, dismissedWithoutInstance])
+    } finally {
+      stopWatch()
+    }
+  }
+
   const controller = {
     id,
     ref: null as RefWithMethods | null,
     async show() {
       const currentModelValue = controller.get()?.value.props.modelValue
       if (currentModelValue) {
-        const event = await basePromise
+        const event = await awaitDismissal()
         return Object.assign(Object.create(event), {
           [Symbol.asyncDispose]: controller.destroy,
         })
@@ -48,7 +90,7 @@ export const buildController = <
       } else {
         controller.set({modelValue: true})
       }
-      const event = await basePromise
+      const event = await awaitDismissal()
       return Object.assign(Object.create(event), {
         [Symbol.asyncDispose]: controller.destroy,
       })
@@ -99,7 +141,7 @@ export const buildController = <
       try {
         if (item.value.props.modelValue) {
           controller.hide('destroy')
-          await basePromise
+          await awaitDismissal()
           await nextTick()
         }
       } finally {

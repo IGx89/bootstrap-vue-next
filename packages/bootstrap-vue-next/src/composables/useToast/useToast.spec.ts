@@ -378,4 +378,56 @@ describe('useToast', () => {
       expect(toastRef?.get()?.value.props.modelValue).toBe(false)
     })
   })
+
+  describe('dismissal before the toast has been shown', () => {
+    const settle = async () => {
+      for (let i = 0; i < 3; i++) await nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      await nextTick()
+    }
+
+    it('settles the promise returned by show()', async () => {
+      let settled = false
+
+      const TestComponent = defineComponent({
+        setup() {
+          const {create, hide} = useToast()
+          const controller = create({id: 'pre-mount', body: 'hello', modelValue: true})
+          controller.show().then(() => {
+            settled = true
+          })
+          // The orchestrator has not rendered the toast yet, so `hide` has no mounted instance to go
+          // through and falls back to the store entry. Nothing will emit `hide` or `hidden`
+          hide('clear', 'pre-mount')
+          return () => h('div')
+        },
+      })
+
+      mount(BApp, {slots: {default: () => h(TestComponent)}})
+      await settle()
+
+      expect(settled, 'show() should resolve once the toast is dismissed').toBe(true)
+    })
+
+    it('settles destroy() for a toast that never mounted', async () => {
+      let destroyed = false
+
+      const TestComponent = defineComponent({
+        setup() {
+          const {create} = useToast()
+          const controller = create({id: 'pre-mount-destroy', body: 'hello', modelValue: true})
+          // `destroy()` hides first and then awaits the same promise, so it has the same exposure
+          controller.destroy().then(() => {
+            destroyed = true
+          })
+          return () => h('div')
+        },
+      })
+
+      mount(BApp, {slots: {default: () => h(TestComponent)}})
+      await settle()
+
+      expect(destroyed, 'destroy() should resolve for a toast that never mounted').toBe(true)
+    })
+  })
 })
